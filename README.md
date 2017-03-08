@@ -27,9 +27,9 @@ Genetic algorithm will be used.
 ## Plan
 
   - [ ] research existing solutions
-	- `ai`
-	- `server`
-	- `client`
+	- [Existing agar.io bots](existing-solutions.md#existing-agario-bots)
+	- [Websocket-based agar.io clients](existing-solutions.md#websocket-based-agario-clients)
+	- Open-source agar.io servers
   - [ ] give a presentation
   - [ ] play on external server
   - [ ] play on internal server
