@@ -29,7 +29,7 @@ Genetic algorithm will be used.
   - [ ] research existing solutions
 	- [Existing agar.io bots](existing-solutions.md#existing-agario-bots)
 	- [Websocket-based agar.io clients](existing-solutions.md#websocket-based-agario-clients)
-	- Open-source agar.io servers
+	- [Open-source agar.io servers](existing-solutions.md#open-source-agario-servers)
   - [ ] give a presentation
   - [ ] play on external server
   - [ ] play on internal server

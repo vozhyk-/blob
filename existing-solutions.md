@@ -7,9 +7,16 @@
 - https://github.com/Apostolique/Agar.io-bot:
   Doesn't work - tries connecting to a server and fails every time. Tested on TamperMonkey on Chrome 56 on Windows 10.
 
-## websocket-based agar.io clients
+## Websocket-based agar.io clients
 
 - https://github.com/ibash/agar:
   Doesn't build - errors when compiling C++ code when running `npm install`
 - https://github.com/Raeon/pygar
   Doesn't run - Hangs when importing libraries (only killed by pressing `^\` 3 times - once for every package being imported). Run with Python 3.4.5 after installing the packages mentioned in README in a virtualenv.
+
+## Open-source agar.io servers
+
+They might have a well-defined protocol, so writing a client for them should be much easier.
+
+- https://github.com/huytd/agar.io-clone: To be tested
+- https://github.com/OgarProject/Ogar: To be tested
