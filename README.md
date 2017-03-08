@@ -13,3 +13,9 @@ Output:
 - an optional action:
   - `split`
   - `feed`
+
+Score:
+ - weighted
+    - `size`
+    - `time lived`
+ - `score` provided by the server
