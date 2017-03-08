@@ -23,7 +23,10 @@ Score:
 
 ## Method
 
-Genetic algorithm will be used.
+A form of evolutional programming is going to be used.
+
+The programs are going to be represented either as Lisp code (s-expressions)
+or as an encoding of it (some form of tree encoding).
 
 ## Plan
 
