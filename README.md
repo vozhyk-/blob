@@ -19,3 +19,25 @@ Score:
     - `size`
     - `time lived`
  - `score` provided by the server
+
+## Method
+
+Genetic algorithm will be used.
+
+## Plan
+
+  - [ ] research existing solutions
+	- `ai`
+	- `server`
+	- `client`
+  - [ ] give a presentation
+  - [ ] play on external server
+  - [ ] play on internal server
+  - [ ] compare results from internal and external training
+	- quality
+	- speed
+  - [ ] compare the results
+	- `ai` vs `pro` vs `amateur`
+  - [ ] give a presentation again
+  - [ ] add teamplay
+  - [ ] profit
