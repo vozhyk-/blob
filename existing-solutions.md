@@ -19,4 +19,4 @@
 They might have a well-defined protocol, so writing a client for them should be much easier.
 
 - https://github.com/huytd/agar.io-clone: Works. Flawless setup in docker container. `pygar` fails to connect. Communication is [documented](https://github.com/huytd/agar.io-clone/wiki/Game-Architecture#client-server-communication). Only a few configuration values available in `config.json`.
-- https://github.com/OgarProject/Ogar: To be tested
+- https://github.com/OgarProject/Ogar: Requires changes to start. Configurable. Does not work (does not listen).
