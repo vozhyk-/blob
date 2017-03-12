@@ -16,7 +16,7 @@
 
 ## Unobfuscated in-browser agar.io clients
 
-- https://github.com/CigarProject/Cigar: Works with `MultiOgar-Edited`. Doesn't work with agar.io - tries connecting and fails every time.
+- https://github.com/CigarProject/Cigar: Works with `MultiOgar-Edited` and cell.sh. Doesn't work with agar.io - tries connecting and fails every time.
 
 ## Open-source agar.io servers
 
