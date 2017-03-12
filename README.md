@@ -28,6 +28,26 @@ A form of evolutional programming is going to be used.
 The programs are going to be represented either as Lisp code (s-expressions)
 or as an encoding of it (some form of tree encoding).
 
+### Basic idea
+
+Each program will be represented by chromosomes and a `base`.
+`base` consists of a value ranges of `score` function at a given moment
+for which a corresponding chromosome should be evaluated.
+
+Number of `chromosomes` is not fixed, same with ranges.
+
+Each `chromosome` consists of genes and is a function that takes `input`
+and produces `output` accoriding to the specification.
+
+Each `gene` is enumerated so that it can be referenced if used as a subexpression.
+
+`gene` is of one of the following types:
+ - an expression consisting of `operation` on the result of two subexpressions
+ - a number
+ - a variable
+
+`operation` is one of the following: `+`, `-`, `/`, `*`, `eq`, `if` (without else).
+
 ## Plan
 
   - [ ] research existing solutions
