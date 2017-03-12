@@ -36,6 +36,15 @@ for which a corresponding chromosome should be evaluated.
 
 Number of `chromosomes` is not fixed, same with ranges.
 
+Example `base`:
+
+```lisp
+(defun base_1 (score input)
+    (cond
+        ((< range_1l score range_1h) (chrom_1 input))
+        (t 0))
+```
+
 Each `chromosome` consists of genes and is a function that takes `input`
 and produces `output` accoriding to the specification.
 
@@ -47,6 +56,17 @@ Each `gene` is enumerated so that it can be referenced if used as a subexpressio
  - a variable
 
 `operation` is one of the following: `+`, `-`, `/`, `*`, `eq`, `if` (without else).
+
+Example `gene` sequence:
+
+```lisp
+(defun gene_1 ()
+    1)
+(defun gene_2 ()
+    (eval 'input))
+(defun gene_3 ()
+    (+ (gene_2) (gene_1)))
+```
 
 ## Plan
 
