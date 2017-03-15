@@ -85,7 +85,7 @@ Operations:
 
 ## Plan
 
-  - [ ] research existing solutions
+  - [x] research existing solutions
 	- [Existing agar.io bots](existing-solutions.md#existing-agario-bots)
 	- [Websocket-based agar.io clients](existing-solutions.md#websocket-based-agario-clients)
 	- [Open-source agar.io servers](existing-solutions.md#open-source-agario-servers)
