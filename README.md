@@ -23,60 +23,65 @@ Score:
 
 ## Method
 
-A form of evolutional programming is going to be used.
+Genetic programming is going to be used.
 
-The programs are going to be represented either as Lisp code (s-expressions)
-or as an encoding of it (some form of tree encoding).
+The programs are going to be represented as Lisp code.
 
-### Basic idea
+### Initial idea
 
-A bot program is Lisp code as a list.
+The first implementation should be as simple as possible.
 
 An example program:
 
 ```lisp
-(if (equal (type (blob 0)) 'mine)
-    (movement (angle (blob 0)) 'feed)
-	(if (equal (type (blob 0)) 'food)
-	    (movement (angle (blob 0)) 'move)
-		(movement (random-angle) 'move)))
+(if (type-p 'mine)
+    (mod (+ direction 180) 2)
+    (if (type-p 'food)
+        direction
+        0))
 ```
 
-To mutate it, we can walk it recursively 
-or store a list of (references to) the individual expressions.
+To choose a subexpression to mutate, we can walk it recursively,
+construct a list of (references to) the individual expressions
+and choose one of them to mutate.
 
 An example of such a list:
 ```lisp
-((if (equal <...> 'mine) <...>)
- (equal <...> 'mine)
- (type <...>)
+((if (type-p 'mine) <...>)
+ (type-p 'mine)
  'mine
- (movement (direction <...>) 'feed)
- (direction <...>)
- 'feed
- <...>)
+ (mod <...>)
+ (+ <...>)
+ direction
+ 180
+ 2
+ (if (type-p 'food) <...>)
+ direction
+ 0)
 ```
 
+Input:
+- closest blob's:
+  - `direction` - a `real` value between 0 and 365
+  - type (as `(type-p type)`)
+  - `size`: the ratio of the size and the bot's own size
+
+Output:
+- `direction` - a `real` value. Will be `mod`'d by 360.
+
 Symbols:
-- `(type (blob i))`
-- `(size (blob i))`
-- ...
-- `'mine`
-- `'food`
-- ...
-- `'split`
-- `'feed`
-- ...
+- `direction`
+- `size`
+- - `(type-p 'food)`
+  - `(type-p 'blob)`
+  - `(type-p 'mine)`
+- `0`, `5`, ..., `355`
 
 Operations:
 - `(if test then else)`
-- `(equal a b)`
 - `(+ a b)`
+- `(- a)`
 - `(< a b)`
-- ...
-
-Terminals:
-- `(movement direction action)`
 
 ## Plan
 
