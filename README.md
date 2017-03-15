@@ -30,43 +30,53 @@ or as an encoding of it (some form of tree encoding).
 
 ### Basic idea
 
-Each program will be represented by chromosomes and a `base`.
-`base` consists of a value ranges of `score` function at a given moment
-for which a corresponding chromosome should be evaluated.
+A bot program is Lisp code as a list.
 
-Number of `chromosomes` is not fixed, same with ranges.
-
-Example `base`:
+An example program:
 
 ```lisp
-(defun base_1 (score input)
-    (cond
-        ((< range_1l score range_1h) (chrom_1 input))
-        (t 0))
+(if (equal (type (blob 0)) 'mine)
+    (movement (angle (blob 0)) 'feed)
+	(if (equal (type (blob 0)) 'food)
+	    (movement (angle (blob 0)) 'move)
+		(movement (random-angle) 'move)))
 ```
 
-Each `chromosome` consists of genes and is a function that takes `input`
-and produces `output` accoriding to the specification.
+To mutate it, we can walk it recursively 
+or store a list of (references to) the individual expressions.
 
-Each `gene` is enumerated so that it can be referenced if used as a subexpression.
-
-`gene` is of one of the following types:
- - an expression consisting of `operation` on the result of two subexpressions
- - a number
- - a variable
-
-`operation` is one of the following: `+`, `-`, `/`, `*`, `eq`, `if` (without else).
-
-Example `gene` sequence:
-
+An example of such a list:
 ```lisp
-(defun gene_1 ()
-    1)
-(defun gene_2 ()
-    (eval 'input))
-(defun gene_3 ()
-    (+ (gene_2) (gene_1)))
+((if (equal <...> 'mine) <...>)
+ (equal <...> 'mine)
+ (type <...>)
+ 'mine
+ (movement (direction <...>) 'feed)
+ (direction <...>)
+ 'feed
+ <...>)
 ```
+
+Symbols:
+- `(type (blob i))`
+- `(size (blob i))`
+- ...
+- `'mine`
+- `'food`
+- ...
+- `'split`
+- `'feed`
+- ...
+
+Operations:
+- `(if test then else)`
+- `(equal a b)`
+- `(+ a b)`
+- `(< a b)`
+- ...
+
+Terminals:
+- `(movement direction action)`
 
 ## Plan
 
