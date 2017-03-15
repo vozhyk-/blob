@@ -3,29 +3,44 @@ An agar.io bot that tries to compete with humans
 
 ## Goal
 
+Beat humans in the agar.io game by having the biggest score.
+
+## Input
+
 Input: A sequence of the last N frames with:
-- positions of other blobs in the neighborhood and their types:
-  - `food`
-  - `player`
-  - `mine`
+- positions and types of:
+  - at most `f` nearest instances of type `food`
+  - at most `p` nearest instances of type `player`
+  - at most `m` nearest instances of type `mine`
 
-Output:
-- direction
-- an optional action:
-  - `split`
-  - `feed`
-
-Score:
- - weighted
-    - `size`
-    - `time lived`
- - `score` provided by the server
+Initially `N = 1`, `f = 1`, `p = 1`, `m = 0` will be used.
+If the results appear to be promising, these values will be changed.
 
 ### Example Input
 
 ![Example 1](doc/agario_1outlined.png)
 
 Values outlined with green are distances to `food`, black - `blob`s.
+
+`N = 1`, `f = 2`, `p = 3`, `m = 0`.
+
+## Output
+
+Output:
+- direction
+- action:
+  - `move`
+  - `split` - move and split
+  - `feed` - move and feed
+
+Initially only `move` action will be allowed.
+
+## Score
+
+During the evolution `score` will be assigned based on:
+ - time lived
+ - `food` consumed
+ - enemies consumed
 
 ## Method
 
