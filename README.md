@@ -21,6 +21,12 @@ Score:
     - `time lived`
  - `score` provided by the server
 
+### Example Input
+
+![Example 1](doc/agario_1outlined.png)
+
+Values outlined with green are distances to `food`, black - `blob`s.
+
 ## Method
 
 Genetic programming is going to be used.
