@@ -52,11 +52,20 @@ The programs are going to be represented as Lisp code.
 
 The first implementation should be as simple as possible.
 
+Input:
+- closest blob's:
+  - `direction` - an `integer` value between 0 and 355
+  - type (as `(type-p type)`)
+  - `size`: the ratio of the size and the bot's own size
+
+Output:
+- `direction` - an `integer` value. Will be `mod`'d by 360.
+
 An example program:
 
 ```lisp
 (if (type-p 'mine)
-    (mod (+ direction 180) 2)
+    (+ direction 180)
     (if (type-p 'food)
         direction
         0))
@@ -71,24 +80,13 @@ An example of such a list:
 ((if (type-p 'mine) <...>)
  (type-p 'mine)
  'mine
- (mod <...>)
  (+ <...>)
  direction
  180
- 2
  (if (type-p 'food) <...>)
  direction
  0)
 ```
-
-Input:
-- closest blob's:
-  - `direction` - a `real` value between 0 and 365
-  - type (as `(type-p type)`)
-  - `size`: the ratio of the size and the bot's own size
-
-Output:
-- `direction` - a `real` value. Will be `mod`'d by 360.
 
 Symbols:
 - `direction`
