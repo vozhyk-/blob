@@ -52,23 +52,13 @@ The programs are going to be represented as Lisp code.
 
 The first implementation should be as simple as possible.
 
-Input:
-- closest blob's:
-  - `direction` - an `integer` value between 0 and 355
-  - type (as `(type-p type)`)
-  - `size`: the ratio of the size and the bot's own size
-
-Output:
-- `direction` - an `integer` value. Will be `mod`'d by 360.
-
 An example program:
 
 ```lisp
-(if (type-p 'mine)
-    (+ direction 180)
-    (if (type-p 'food)
-        direction
-        0))
+(if (< (distance (mine 0))
+       (distance (food 0)))
+    (+ 180 (direction (mine 0)))
+    (direction (food 0)))
 ```
 
 To choose a subexpression to mutate, we can walk it recursively,
@@ -77,23 +67,20 @@ and choose one of them to mutate.
 
 An example of such a list:
 ```lisp
-((if (type-p 'mine) <...>)
- (type-p 'mine)
- 'mine
- (+ <...>)
- direction
+((if (< <...>) <...>)
+ (< <...>)
+ (distance (mine 0))
+ (distance (food 0))
+ (+ 180 <...>)
  180
- (if (type-p 'food) <...>)
- direction
- 0)
+ (direction (mine 0))
+ (direction (food 0)))
 ```
 
 Symbols:
-- `direction`
-- `size`
-- - `(type-p 'food)`
-  - `(type-p 'blob)`
-  - `(type-p 'mine)`
+- `(distance (mine i))`
+- `(direction (mine i))`
+- `(size (mine i))`
 - `0`, `5`, ..., `355`
 
 Operations:
