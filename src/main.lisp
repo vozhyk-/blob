@@ -13,4 +13,4 @@
         (start-connection ws)))))
 
 ;; Start Wookie server
-(clack:clackup *echo-server* :server :wookie :port 5000)
+(clack:clackup *echo-server* :server :wookie :port 60124)
