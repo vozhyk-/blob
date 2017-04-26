@@ -7,7 +7,7 @@
     (let ((ws (make-server env)))
       (on :message ws
           (lambda (message)
-            (send ws (print message))))
+            (send ws message)))
       (lambda (responder)
         (declare (ignore responder))
         (start-connection ws)))))
