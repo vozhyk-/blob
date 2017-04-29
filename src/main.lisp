@@ -1,16 +1,38 @@
-(ql:quickload '(:websocket-driver-server :clack))
+(ql:quickload '(:websocket-driver-server :clack :babel :yason :alexandria))
 
 (use-package :websocket-driver)
 
-(defvar *echo-server*
-  (lambda (env)
-    (let ((ws (make-server env)))
-      (on :message ws
-          (lambda (message)
-            (send ws message)))
-      (lambda (responder)
-        (declare (ignore responder))
-        (start-connection ws)))))
+(defun decode-world (message)
+  (yason:parse message))
 
-;; Start Wookie server
-(clack:clackup *echo-server* :server :wookie :port 60124)
+(defun encode-action (action)
+  (with-output-to-string (stream)
+    (yason:encode action stream)))
+
+(defun bot-action (world)
+  (declare (ignore world))
+  (alexandria:plist-hash-table '("direction" 45)))
+
+(defun reply (message)
+  (encode-action (bot-action (decode-world message))))
+
+
+(defun bot-server (env)
+  (let ((ws (make-server env)))
+    (on :message ws
+        (lambda (message)
+          (send ws (reply message))))
+    (lambda (responder)
+      (declare (ignore responder))
+      (start-connection ws))))
+
+(defun start-server ()
+  (clack:clackup #'bot-server :server :wookie :port 60124))
+
+(defvar *server* (start-server))
+
+(defun restart-server ()
+  (setf *server* (start-server)))
+
+(defun stop-server ()
+  (clack:stop *server*))
