@@ -5,15 +5,20 @@
 
 (use-package :websocket-driver)
 
-(defun reply (message)
-  (encode-action (bot-action (decode-world message))))
+(defun reply (decoded-message)
+  (encode-action (bot-action decoded-message)))
 
+(defun handle-message (ws message)
+  (let ((decoded-message (decode-world message)))
+    (if (score decoded-message)
+        nil
+        (send ws (reply decoded-message)))))
 
 (defun bot-server (env)
   (let ((ws (make-server env)))
     (on :message ws
         (lambda (message)
-          (send ws (reply message))))
+          (handle-message ws message)))
     (lambda (responder)
       (declare (ignore responder))
       (start-connection ws))))

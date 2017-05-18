@@ -5,6 +5,10 @@
   (with-output-to-string (stream)
     (yason:encode action stream)))
 
+(defun score (message)
+  (and (hash-table-p message)
+       (gethash "score" message)))
+
 (defun blob-position (blob)
   (gethash "position" blob))
 
