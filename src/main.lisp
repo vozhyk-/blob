@@ -1,5 +1,6 @@
 (ql:quickload '(:websocket-driver-server :clack :babel :yason :alexandria))
 
+(load "world.lisp")
 (load "bot.lisp")
 
 (use-package :websocket-driver)
