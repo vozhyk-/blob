@@ -1,7 +1,12 @@
 (ql:quickload '(:websocket-driver-server :clack :babel :yason :alexandria :mgl-gpr))
 
+(deftype blob () 'plist-hash-table)
+(deftype direction () real)
+(deftype distance () real)
+
 (load "world.lisp")
 (load "bot.lisp")
+(load "evolution.lisp")
 
 (use-package :websocket-driver)
 
@@ -11,7 +16,7 @@
 (defun handle-message (ws message)
   (let ((decoded-message (decode-world message)))
     (if (score decoded-message)
-        nil
+        (format t "Bot score: ~a~%" (score decoded-message)) ; FIXME score is executed twice
         (send ws (reply decoded-message)))))
 
 (defun bot-server (env)

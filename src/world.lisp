@@ -9,8 +9,9 @@
   (and (hash-table-p message)
        (gethash "score" message)))
 
-(defun blob-position (blob)
-  (gethash "position" blob))
+(defun blob-position (xblob)
+  (declare 'blob xblob)
+  (gethash "position" xblob))
 
 (defun x (position)
   (gethash "x" position))
