@@ -1,14 +1,11 @@
 (ql:quickload '(:websocket-driver-server :clack :babel :yason :alexandria :mgl-gpr))
 
-(deftype blob () 'plist-hash-table)
-(deftype direction () real)
-(deftype distance () real)
+(use-package :websocket-driver)
+(use-package :mgl-gpr)
 
 (load "world.lisp")
 (load "bot.lisp")
 (load "evolution.lisp")
-
-(use-package :websocket-driver)
 
 (defun reply (decoded-message)
   (encode-action (bot-action decoded-message)))
