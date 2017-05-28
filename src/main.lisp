@@ -15,13 +15,14 @@
     (format t "World: ~a~%" *world*)
     (format t "Expr: ~a~%" expr)
     (format t "Direction: ~a~%" direction)
-    (encode-action direction)))
+    (alexandria:plist-hash-table
+      (list "direction" direction))))
 
 (defun handle-message (ws message expr)
   (let ((decoded-message (decode-world message)))
     (if (score decoded-message)
         (format t "Bot score: ~a~%" (score decoded-message)) ; FIXME score is executed twice
-        (send ws (reply-gp expr decoded-message)))))
+        (send ws (encode-action (reply-gp expr decoded-message))))))
 
 (defun bot-server (env)
   (let ((ws (make-server env))
