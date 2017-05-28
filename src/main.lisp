@@ -13,7 +13,6 @@
   (let* ((*world* decoded-message)
          (direction (eval expr)))
     (format t "World: ~a~%" *world*)
-    (format t "Expr: ~a~%" expr)
     (format t "Direction: ~a~%" direction)
     (alexandria:plist-hash-table
       (list "direction" direction))))
@@ -27,12 +26,18 @@
 (defun bot-server (env)
   (let ((ws (make-server env))
         (expr (mgl-gpr:random-gp-expression *gp* (lambda (level) (declare (ignore level)) nil))))
+    (format t "Expr: ~a~%" expr)
     (on :message ws
         (lambda (message)
           (handle-message ws message expr)))
     (lambda (responder)
       (declare (ignore responder))
       (start-connection ws))))
+
+;; Generate 16 simple examples
+(loop repeat 16 do
+      (format t "~a~%" (mgl-gpr:random-gp-expression *gp* (lambda (level) (< 8 level)))))
+
 
 (defun start-server ()
   (clack:clackup #'bot-server :server :wookie :port 60124))
