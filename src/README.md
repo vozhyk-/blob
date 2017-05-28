@@ -1,7 +1,9 @@
 # Dependency installation
 
 1. Install [quicklisp](https://www.quicklisp.org/beta/)
-2. Install [mgl-gpr](https://github.com/melisgl/mgl-gpr) in the `local-projects`.
+2. Install R (`dev-lang/R` in Gentoo)
+   (needed for `libRmath.so` used by `mgl-gpr`)
+2. Install [mgl-gpr](https://github.com/melisgl/mgl-gpr) in `local-projects`:
 ```
 git clone https://github.com/melisgl/mgl-gpr.git quicklisp/local-projects/mgl-gpr
 ```
