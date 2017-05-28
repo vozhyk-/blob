@@ -1,7 +1,3 @@
-
-(defun rad->deg (radians)
-  (* (/ radians pi) 180))
-
 (defun blob-distance (blob)
   (let* ((position (blob-position blob)))
     (with-accessors ((x x) (y y)) position

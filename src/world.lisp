@@ -25,6 +25,9 @@
 (defun y (position)
   (gethash "y" position))
 
+(defun rad->deg (radians)
+  (* (/ radians pi) 180))
+
 (defun compute-direction (position)
   (rad->deg (atan (y position)
                   (x position))))
