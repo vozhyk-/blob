@@ -5,7 +5,13 @@
 
 (defun closest-blob (world)
   (let ((sorted (sort world #'< :key #'blob-distance)))
-    (and sorted (first sorted))))
+    (if sorted
+      (first sorted)
+      (make-instance 'blob
+                     :type 0
+                     :position (alexandria:plist-hash-table
+                                 '("x" 0 "y" 0)
+                                 :test #'equal)))))
 
 (defun bot-direction (world)
   (let ((closest-blob (closest-blob world)))
