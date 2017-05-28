@@ -9,17 +9,26 @@
 (defun reply (decoded-message)
   (encode-action (bot-action decoded-message)))
 
-(defun handle-message (ws message)
+(defun reply-gp (expr decoded-message)
+  (let* ((*world* decoded-message)
+         (direction (eval expr)))
+    (format t "World: ~a~%" *world*)
+    (format t "Expr: ~a~%" expr)
+    (format t "Direction: ~a~%" direction)
+    (encode-action direction)))
+
+(defun handle-message (ws message expr)
   (let ((decoded-message (decode-world message)))
     (if (score decoded-message)
         (format t "Bot score: ~a~%" (score decoded-message)) ; FIXME score is executed twice
-        (send ws (reply decoded-message)))))
+        (send ws (reply-gp expr decoded-message)))))
 
 (defun bot-server (env)
-  (let ((ws (make-server env)))
+  (let ((ws (make-server env))
+        (expr (mgl-gpr:random-gp-expression *gp* (lambda (level) (declare (ignore level)) nil))))
     (on :message ws
         (lambda (message)
-          (handle-message ws message)))
+          (handle-message ws message expr)))
     (lambda (responder)
       (declare (ignore responder))
       (start-connection ws))))

@@ -6,15 +6,14 @@
                                 (mgl-gpr:operator (blob-distance blob) distance)
                                 (mgl-gpr:operator (blob-type blob) type)))
 (defparameter *literals* (list (mgl-gpr:literal (blob)
-                                 (closest-blob *world*))))
+                                 '(closest-blob *world*))))
 
-(defvar *world*
-  (list
-   (make-instance 'blob
-                  :type 0
-                  :position (alexandria:plist-hash-table
-                             '("x" 0 "y" 1)
-                             :test #'equal))))
-
-(mgl-gpr:random-expression *operators* *literals* 'direction
-                           (lambda (level) (declare (ignore level)) nil))
+(defvar *world*)
+(defvar *gp*
+  (make-instance 'mgl-gpr:genetic-programming
+                 :toplevel-type 'direction
+                 :operators *operators*
+                 :literals *literals*
+                 :population-size 64
+                 :copy-chance 0.05
+                 :mutation-chance 0.1))
