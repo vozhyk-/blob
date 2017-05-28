@@ -1,4 +1,5 @@
 (deftype direction () '(real 0 360))
+(deftype distance () 'real)
 
 (defparameter *operators* (list (mgl-gpr:operator (blob-direction blob)
                                                   direction)
