@@ -4,7 +4,7 @@
                                                   direction)
                                 (mgl-gpr:operator (blob-distance blob) distance)
                                 (mgl-gpr:operator (blob-type blob) type)))
-(defparameter *literals* (list (literal (blob)
+(defparameter *literals* (list (mgl-gpr:literal (blob)
                                  (closest-blob *world*))))
 
 (defvar *world*
