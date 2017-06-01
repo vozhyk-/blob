@@ -32,8 +32,8 @@
                                  (random 360.0))
                                (mgl-gpr:literal (const-distance)
                                  (random 100))
-                               (mgl-gpr:literal (cosnt-type) 0)
-                               (mgl-gpr:literal (cosnt-type) 1)
+                               (mgl-gpr:literal (const-type) 0)
+                               (mgl-gpr:literal (const-type) 1)
                                (mgl-gpr:literal (const-type) 2)))
 
 (defvar *world*)
