@@ -10,10 +10,8 @@
   (encode-action (bot-action decoded-message)))
 
 (defun reply-gp (expr decoded-message)
-  (let* ((*world* decoded-message)
+  (let* ((*sorted-world* (sort-world decoded-message))
          (direction (eval expr)))
-    (format t "World: ~a~%" *world*)
-    (format t "Direction: ~a~%" direction)
     (alexandria:plist-hash-table
       (list "direction" direction))))
 
@@ -35,8 +33,8 @@
       (start-connection ws))))
 
 ;; Generate 16 simple examples
-(loop repeat 16 do
-      (format t "~a~%" (mgl-gpr:random-gp-expression *gp* (lambda (level) (< 8 level)))))
+(dotimes (i 16)
+  (format t "~a~%" (mgl-gpr:random-gp-expression *gp* (lambda (level) nil))))
 
 
 (defun start-server ()

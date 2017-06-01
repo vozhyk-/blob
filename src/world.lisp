@@ -41,12 +41,20 @@
     (with-accessors ((x x) (y y)) position
       (sqrt (* x x y y)))))
 
-(defvar *const-blob*
+(defconstant +nil-blob+
   (make-instance 'blob
                  :type 0
                  :position (alexandria:plist-hash-table
                             '("x" 0 "y" 0)
                             :test #'equal)))
 
+(defun is-nil (blob)
+  (eq +nil-blob+ blob))
+
 (defun sort-world (world)
   (sort world #'< :key #'blob-distance))
+
+(defun get-blob (sorted-world position)
+  (if (< position (length sorted-world))
+    (nth position sorted-world)
+    +nil-blob+))

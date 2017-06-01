@@ -2,6 +2,9 @@
                                 (mgl-gpr:operator (blob-direction blob) direction)
                                 (mgl-gpr:operator (blob-distance blob) distance)
                                 (mgl-gpr:operator (blob-type blob) type)
+                                ;; sorted-world related operations
+                                (mgl-gpr:operator (get-blob sorted-world position) blob)
+                                (mgl-gpr:operator (is-nil blob) cond)
                                 ;; Branch
                                 (mgl-gpr:operator (if cond
                                                     direction
@@ -26,8 +29,12 @@
                                                   :weight 0.1)
                                 (mgl-gpr:operator (= const-type type) cond
                                                   :weight 0.3)))
-(defparameter *literals* (list (mgl-gpr:literal (blob)
-                                 '(closest-blob *world*))
+(defparameter *literals* (list (mgl-gpr:literal (sorted-world)
+                                 '*sorted-world*)
+                               (mgl-gpr:literal (position)
+                                 (random 8))
+                               (mgl-gpr:literal (const-direction)
+                                 (random 360.0))
                                (mgl-gpr:literal (const-direction)
                                  (random 360.0))
                                (mgl-gpr:literal (const-distance)
@@ -36,7 +43,7 @@
                                (mgl-gpr:literal (const-type) 1)
                                (mgl-gpr:literal (const-type) 2)))
 
-(defvar *world*)
+(defvar *sorted-world*)
 (defvar *gp*
   (make-instance 'mgl-gpr:genetic-programming
                  :toplevel-type 'direction
