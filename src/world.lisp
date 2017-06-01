@@ -35,3 +35,18 @@
 (defmethod initialize-instance :after ((blob blob) &key position)
   (setf (blob-direction blob)
         (compute-direction position)))
+
+(defun blob-distance (blob)
+  (let* ((position (blob-position blob)))
+    (with-accessors ((x x) (y y)) position
+      (sqrt (* x x y y)))))
+
+(defvar *const-blob*
+  (make-instance 'blob
+                 :type 0
+                 :position (alexandria:plist-hash-table
+                            '("x" 0 "y" 0)
+                            :test #'equal)))
+
+(defun sort-world (world)
+  (sort world #'< :key #'blob-distance))
