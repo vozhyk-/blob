@@ -3,6 +3,7 @@
 
 (defun encode-action (action)
   (with-output-to-string (stream)
+    (format stream ";")
     (yason:encode action stream)))
 
 (defun score (message)
