@@ -11,7 +11,7 @@
 
 (defun reply-gp (expr decoded-message)
   (let* ((*sorted-world* (sort-world decoded-message))
-         (direction (eval expr)))
+         (direction (funcall expr)))
     (alexandria:plist-hash-table
       (list "direction" direction))))
 

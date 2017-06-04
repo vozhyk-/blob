@@ -94,7 +94,7 @@
 (defun evaluate (gp expr)
   (declare (ignore gp))
   (format t "Expr: ~a~%" expr)
-  (let ((score (get-score expr))
+  (let ((score (get-score (compile nil `(lambda () ,expr))))
         (size (mgl-gpr:count-nodes expr)))
         (format t "Bot score, size: ~a, ~a~%" score size)
         (cond
