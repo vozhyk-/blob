@@ -1,4 +1,4 @@
-(ql:quickload '(:websocket-driver-client :babel :yason :alexandria :mgl-gpr))
+(ql:quickload '(:websocket-driver-client :babel :yason :alexandria :mgl-gpr :bordeaux-threads))
 
 (use-package :websocket-driver)
 
