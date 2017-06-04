@@ -70,7 +70,7 @@
             (if l-score
               (setf score l-score))
             (if (>= responses life-limit)
-              (close-connection ws)))))
+              (bt:condition-notify done)))))
     (start-connection ws)
     (bt:with-lock-held (lock)
                        (bt:condition-wait done lock)
