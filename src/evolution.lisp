@@ -68,7 +68,7 @@
           (done-cond (bt:make-condition-variable))
           (score 0)
           (responses 0)
-          (life-limit (* 512 (+ 1 (mgl-gpr:generation-counter *gp*)))))
+          (life-limit (max 256 (* 32 (mgl-gpr:generation-counter *gp*)))))
       (flet ((done ()
                (bt:with-lock-held (lock)
                  (setf done-p t))
