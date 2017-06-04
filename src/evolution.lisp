@@ -71,8 +71,8 @@
           (life-limit (max 256 (* 32 (mgl-gpr:generation-counter *gp*)))))
       (flet ((done ()
                (bt:with-lock-held (lock)
-                 (setf done-p t))
-               (bt:condition-notify done-cond)))
+                 (setf done-p t)
+                 (bt:condition-notify done-cond))))
         (send ws (make-join-message))
         (on :close ws
             (lambda (&key code reason)
@@ -94,8 +94,9 @@
                   (done)))))
         (start-connection ws)
         (bt:with-lock-held (lock)
-          (loop while (not done-p)
-             do (bt:condition-wait done-cond lock :timeout 300)))
+          (bt:condition-wait done-cond lock :timeout 300)
+          (unless done-p
+            (format t "~&Spurious wakeup!~%")))
         (close-connection ws)
         score))))
 
