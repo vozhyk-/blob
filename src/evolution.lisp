@@ -7,9 +7,13 @@
                                 (mgl-gpr:operator (is-nil blob) cond)
                                 ;; Branch
                                 (mgl-gpr:operator (if cond
+                                                    blob
+                                                    blob) blob
+                                                  :weight 0.8)
+                                (mgl-gpr:operator (if cond
                                                     direction
                                                     direction) direction
-                                                  :weight 0.5)
+                                                  :weight 0.2)
                                 (mgl-gpr:operator (and cond cond) cond
                                                   :weight 0.01)
                                 (mgl-gpr:operator (or cond cond) cond
