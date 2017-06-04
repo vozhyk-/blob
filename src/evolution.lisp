@@ -93,10 +93,13 @@
                 (when (>= responses life-limit)
                   (done)))))
         (start-connection ws)
+          (let ((i 0))
+            (loop while (and (> 16 i) (not done-p)) do
+                  (incf i)
         (bt:with-lock-held (lock)
-          (bt:condition-wait done-cond lock :timeout 300)
+                  (bt:condition-wait done-cond lock :timeout 20))))
           (unless done-p
-            (format t "~&Spurious wakeup!~%")))
+            (format t "~&Spurious wakeup!~%"))
         (close-connection ws)
         score))))
 

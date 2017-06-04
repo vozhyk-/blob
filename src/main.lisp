@@ -44,7 +44,7 @@
                        :toplevel-type 'direction
                        :operators *operators*
                        :literals *literals*
-                       :population-size 8
+                       :population-size 16
                        :copy-chance 0.2
                        ;; It means that there is 1 - 0.2 - 0.4 = 0.4
                        ;; chance that it will crossover
@@ -67,5 +67,5 @@
 
 (defun run (url)
   (setf *url* url)
-  (loop repeat 256 do
+  (loop repeat 16384 do
        (advance-gp *gp*)))
