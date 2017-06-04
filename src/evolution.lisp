@@ -44,10 +44,43 @@
                                (mgl-gpr:literal (const-type) 2)))
 
 (defvar *sorted-world*)
-(defvar *gp*
-  (make-instance 'mgl-gpr:genetic-programming
-                 :toplevel-type 'direction
-                 :operators *operators*
-                 :literals *literals*
-                 :copy-chance 0.9
-                 :mutation-chance 0.1))
+
+(defun get-score (expr)
+  (let ((ws (make-client *url*))
+        (lock (bt:make-lock)) ;; Only needed by condition-wait
+        (done (bt:make-condition-variable))
+        (score 0))
+    (send ws (make-join-message))
+    (on :close ws
+        (lambda (code reason)
+          (bt:condition-notify done)))
+    (on :error ws
+        (lambda (error)
+          (bt:condition-notify done)))
+    (on :message ws
+        (lambda (message)
+          (handle-message ws message expr score)))
+    (start-connection ws)
+    (bt:with-lock-held (lock)
+                       (bt:condition-wait done lock)
+                       score)))
+
+(defun evaluate (gp expr)
+  (declare (ignore gp))
+  (format t "Expr: ~a~%" expr)
+  (let ((score (get-score expr)))
+        (format t "Bot score: ~a~%" score)
+        score))
+
+(defun report-fittest (gp fittest fitness)
+  (format t "Best fitness until generation ~S: ~S for~%  ~S~%"
+          (mgl-gpr:generation-counter gp) fitness fittest))
+
+(defun select (gp fitnesses)
+  (declare (ignore gp))
+  (mgl-gpr:hold-tournament fitnesses :n-contestants 2))
+
+(defun advance-gp (gp)
+  (when (zerop (mod (mgl-gpr:generation-counter gp) 20))
+    (format t "Generation ~S~%" (mgl-gpr:generation-counter gp)))
+  (mgl-gpr:advance gp))

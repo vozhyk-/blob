@@ -2,7 +2,7 @@
   (let ((sorted (sort-world world)))
     (if sorted
         (first sorted)
-        *const-blob*)))
+        +nil-blob+)))
 
 (defun bot-direction (world)
   (let ((closest-blob (closest-blob world)))

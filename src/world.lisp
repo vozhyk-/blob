@@ -6,7 +6,7 @@
     (format stream ";")
     (yason:encode action stream)))
 
-(defun score (message)
+(defun decode-score (message)
   (and (hash-table-p message)
        (gethash "score" message)))
 
