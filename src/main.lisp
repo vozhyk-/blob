@@ -36,26 +36,36 @@
           (handle-message ws message expr)))
     (start-connection ws)))
 
-(defvar *gp*
-  (make-instance 'mgl-gpr:genetic-programming
-                 :toplevel-type 'direction
-                 :operators *operators*
-                 :literals *literals*
-                 :population-size 8
-                 :copy-chance 0.2
-                 :mutation-chance 0.4 ;; It means that there is 1 - 0.2 - 0.4 = 0.4 chance that it will crossover
-                 :evaluator 'evaluate ;; To avoid an error, mass-evaluate should take precedance
-                 :mass-evaluator 'mass-evaluate
-                 :randomizer 'randomize
-                 :selector 'select
-                 :fittest-changed-fn 'report-fittest))
+(defvar *gp*)
 
-(loop repeat (mgl-gpr:population-size *gp*) do
-      (mgl-gpr:add-individual *gp*
-        (mgl-gpr:random-gp-expression *gp*
-          (lambda (level) (declare (ignore level)) nil))))
+(defun reset-gp ()
+  (setf *gp*
+        (make-instance 'mgl-gpr:genetic-programming
+                       :toplevel-type 'direction
+                       :operators *operators*
+                       :literals *literals*
+                       :population-size 8
+                       :copy-chance 0.2
+                       ;; It means that there is 1 - 0.2 - 0.4 = 0.4
+                       ;; chance that it will crossover
+                       :mutation-chance 0.4
+                       ;; To avoid an error, mass-evaluate
+                       ;; should take precedance
+                       :evaluator 'evaluate
+                       :mass-evaluator 'mass-evaluate
+                       :randomizer 'randomize
+                       :selector 'select
+                       :fittest-changed-fn 'report-fittest))
+  (loop repeat (mgl-gpr:population-size *gp*) do
+       (mgl-gpr:add-individual *gp*
+         (mgl-gpr:random-gp-expression *gp*
+           (lambda (level) (declare (ignore level)) nil)))))
+
+(reset-gp)
+
+(defvar *url*)
 
 (defun run (url)
-  (defvar *url* url)
+  (setf *url* url)
   (loop repeat 256 do
-        (advance-gp *gp*)))
+       (advance-gp *gp*)))
