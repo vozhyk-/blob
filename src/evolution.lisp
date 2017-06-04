@@ -82,10 +82,14 @@
   (format t "Expr: ~a~%" expr)
   (let ((score (get-score expr))
         (size (mgl-gpr:count-nodes expr)))
-        (format t "Bot score: ~a~%" score)
-        (if (> size 64)
-          (- score size) ;; Penalize big expressions
-          score)))
+        (format t "Bot score, size: ~a, ~a~%" score size)
+        (cond
+          ((> size 64) ;; Penalize big expressions
+           (- score size))
+          ((= size 4) ;; Penalize one-liners
+           (- score 16))
+          (t
+            score))))
 
 (defun mass-evaluate (gp population fitnesses)
   (let* ((len (length population))
