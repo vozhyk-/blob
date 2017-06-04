@@ -14,12 +14,14 @@
 (defclass blob ()
   ((position :initarg :position :accessor blob-position)
    (direction :accessor blob-direction)
-   (type :initarg :type :accessor blob-type)))
+   (type :initarg :type :accessor blob-type)
+   (size :initarg :size :accessor blob-size)))
 
 (defun parse-blob (hash)
   (make-instance 'blob
                  :position (gethash "position" hash)
-                 :type (gethash "cellType" hash)))
+                 :type (gethash "cellType" hash)
+                 :size (gethash "size" hash)))
 
 (defun x (position)
   (gethash "x" position))
@@ -46,6 +48,7 @@
 (defconstant +nil-blob+
   (make-instance 'blob
                  :type 0
+                 :size 0
                  :position (alexandria:plist-hash-table
                             '("x" 0 "y" 0)
                             :test #'equal)))

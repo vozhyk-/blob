@@ -2,6 +2,7 @@
                                 (mgl-gpr:operator (blob-direction blob) direction)
                                 (mgl-gpr:operator (blob-distance blob) distance)
                                 (mgl-gpr:operator (blob-type blob) type)
+                                (mgl-gpr:operator (blob-size blob) size)
                                 ;; sorted-world related operations
                                 (mgl-gpr:operator (get-blob sorted-world position) blob)
                                 (mgl-gpr:operator (is-nil blob) cond)
@@ -9,7 +10,7 @@
                                 (mgl-gpr:operator (if cond
                                                     blob
                                                     blob) blob
-                                                  :weight 0.8)
+                                                  :weight 0.2)
                                 (mgl-gpr:operator (if cond
                                                     direction
                                                     direction) direction
@@ -32,7 +33,14 @@
                                 (mgl-gpr:operator (= type type) cond
                                                   :weight 0.1)
                                 (mgl-gpr:operator (= const-type type) cond
-                                                  :weight 0.3)))
+                                                  :weight 0.3)
+                                ;; Size-related condtions
+                                (mgl-gpr:operator (< size size) cond
+                                                  :weight 0.2)
+                                (mgl-gpr:operator (< const-size size) cond
+                                                  :weight 0.1)
+                                (mgl-gpr:operator (< size const-size) cond
+                                                  :weight 0.1)))
 (defparameter *literals* (list (mgl-gpr:literal (sorted-world)
                                  '*sorted-world*)
                                (mgl-gpr:literal (position)
@@ -45,7 +53,9 @@
                                  (random 100))
                                (mgl-gpr:literal (const-type) 0)
                                (mgl-gpr:literal (const-type) 1)
-                               (mgl-gpr:literal (const-type) 2)))
+                               (mgl-gpr:literal (const-type) 2)
+                               (mgl-gpr:literal (const-size)
+                                 (random 1024))))
 
 (defvar *sorted-world*)
 
