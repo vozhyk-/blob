@@ -52,17 +52,21 @@
         (score 0))
     (send ws (make-join-message))
     (on :close ws
-        (lambda (code reason)
+        (lambda (arg1 code arg2 reason)
+          (format t "Closed '~A' (Code=~A) ~%" reason code)
           (bt:condition-notify done)))
     (on :error ws
         (lambda (error)
+          (format t "Error: ~S~%" error)
           (bt:condition-notify done)))
     (on :message ws
         (lambda (message)
           (handle-message ws message expr score)))
     (start-connection ws)
     (bt:with-lock-held (lock)
-                       (bt:condition-wait done lock)
+                       (bt:condition-wait done lock
+                                          :timeout 20)
+                       (close-connection ws)
                        score)))
 
 (defun evaluate (gp expr)
@@ -78,9 +82,8 @@
 
 (defun select (gp fitnesses)
   (declare (ignore gp))
-  (mgl-gpr:hold-tournament fitnesses :n-contestants 2))
+  (mgl-gpr:hold-tournament fitnesses :n-contestants 8))
 
 (defun advance-gp (gp)
-  (when (zerop (mod (mgl-gpr:generation-counter gp) 20))
-    (format t "Generation ~S~%" (mgl-gpr:generation-counter gp)))
+  (format t "Generation ~S~%" (mgl-gpr:generation-counter gp))
   (mgl-gpr:advance gp))
