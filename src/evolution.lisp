@@ -52,7 +52,7 @@
         (score 0))
     (send ws (make-join-message))
     (on :close ws
-        (lambda (arg1 code arg2 reason)
+        (lambda (&key code reason)
           (format t "Closed '~A' (Code=~A) ~%" reason code)
           (bt:condition-notify done)))
     (on :error ws
@@ -61,11 +61,13 @@
           (bt:condition-notify done)))
     (on :message ws
         (lambda (message)
-          (handle-message ws message expr score)))
+          (let ((l-score (handle-message ws message expr)))
+            (if l-score
+              (setf score l-score)))))
     (start-connection ws)
     (bt:with-lock-held (lock)
                        (bt:condition-wait done lock
-                                          :timeout 20)
+                                          :timeout 360)
                        (close-connection ws)
                        score)))
 

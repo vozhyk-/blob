@@ -1,5 +1,5 @@
 (defun decode-world (message)
-  (mapcar #'parse-blob (yason:parse message)))
+  (mapcar #'parse-blob message))
 
 (defun encode-action (action)
   (with-output-to-string (stream)
@@ -7,8 +7,9 @@
     (yason:encode action stream)))
 
 (defun decode-score (message)
-  (and (hash-table-p message)
-       (gethash "score" message)))
+  (if (hash-table-p message)
+    (gethash "score" message)
+    nil))
 
 (defclass blob ()
   ((position :initarg :position :accessor blob-position)

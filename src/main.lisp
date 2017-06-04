@@ -18,12 +18,13 @@
 (defun make-join-message ()
   "!")
 
-(defun handle-message (ws message expr expr-score)
-  (let ((score (decode-score message)))
+(defun handle-message (ws message expr)
+  (let* ((parsed-msg (yason:parse message))
+         (score (decode-score parsed-msg)))
     (if score
-      ((setq expr-score score)
-       (close-connection ws))
-      (send ws (encode-action (reply-gp expr (decode-world message)))))))
+      score
+      (and (send ws (encode-action (reply-gp expr (decode-world parsed-msg))))
+           nil))))
 
 (defun connect (url)
   (let ((ws (make-client url))
@@ -34,8 +35,6 @@
         (lambda (message)
           (handle-message ws message expr)))
     (start-connection ws)))
-
-(defvar *url* "ws://192.168.0.12:64645/")
 
 (defvar *gp*
   (make-instance 'mgl-gpr:genetic-programming
@@ -56,5 +55,7 @@
         (mgl-gpr:random-gp-expression *gp*
           (lambda (level) (declare (ignore level)) nil))))
 
-(loop repeat 16 do
-      (advance-gp *gp*))
+(defun run (url)
+  (defvar *url* url)
+  (loop repeat 16 do
+        (advance-gp *gp*)))
