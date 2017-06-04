@@ -42,8 +42,8 @@
                  :operators *operators*
                  :literals *literals*
                  :population-size 8
-                 :copy-chance 0.9
-                 :mutation-chance 0.1
+                 :copy-chance 0.2
+                 :mutation-chance 0.4 ;; It means that there is 1 - 0.2 - 0.4 = 0.4 chance that it will crossover
                  :evaluator 'evaluate ;; To avoid an error, mass-evaluate should take precedance
                  :mass-evaluator 'mass-evaluate
                  :randomizer 'randomize
@@ -57,5 +57,5 @@
 
 (defun run (url)
   (defvar *url* url)
-  (loop repeat 16 do
+  (loop repeat 256 do
         (advance-gp *gp*)))

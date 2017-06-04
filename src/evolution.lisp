@@ -49,11 +49,14 @@
   (let ((ws (make-client *url*))
         (lock (bt:make-lock)) ;; Only needed by condition-wait
         (done (bt:make-condition-variable))
-        (score 0))
+        (score 0)
+        (responses 0))
     (send ws (make-join-message))
     (on :close ws
         (lambda (&key code reason)
-          (format t "Closed '~A' (Code=~A) ~%" reason code)
+          (format t "Sent ~A responses~%" responses)
+          (if code
+            (format t "Closed '~A' (Code=~A) ~%" reason code))
           (bt:condition-notify done)))
     (on :error ws
         (lambda (error)
@@ -62,12 +65,14 @@
     (on :message ws
         (lambda (message)
           (let ((l-score (handle-message ws message expr)))
+            (incf responses)
             (if l-score
-              (setf score l-score)))))
+              (setf score l-score))
+            (if (>= responses 1024)
+              (close-connection ws)))))
     (start-connection ws)
     (bt:with-lock-held (lock)
-                       (bt:condition-wait done lock
-                                          :timeout 360)
+                       (bt:condition-wait done lock)
                        (close-connection ws)
                        score)))
 
@@ -81,6 +86,7 @@
 (defun mass-evaluate (gp population fitnesses)
   (let* ((len (length population))
         (threads (make-array len)))
+    (format t "Mass-evaluate ~S expressions~%" len)
     (dotimes (i len)
       (let ((i i))
         (setf (aref threads i)
@@ -101,7 +107,8 @@
 
 (defun select (gp fitnesses)
   (declare (ignore gp))
-  (mgl-gpr:hold-tournament fitnesses :n-contestants 8))
+  (mgl-gpr:hold-tournament fitnesses
+                           :n-contestants 4))
 
 (defun advance-gp (gp)
   (format t "Generation ~S~%" (mgl-gpr:generation-counter gp))

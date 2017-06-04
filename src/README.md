@@ -12,5 +12,6 @@ git clone https://github.com/melisgl/mgl-gpr.git quicklisp/local-projects/mgl-gp
 
 1. Run common lisp interpreter
 2. Execute `(load "main.lisp")`
+3. Run `(run "ws://192.168.0.12:64645/")`
 
 The other method is to simply execute the main file as in command `sbcl --load main.lisp`.
