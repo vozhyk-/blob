@@ -76,6 +76,23 @@
         (format t "Bot score: ~a~%" score)
         score))
 
+(defun mass-evaluate (gp population fitnesses)
+  (let* ((len (length population))
+        (threads (make-array len)))
+    (dotimes (i len)
+      (let ((i i))
+        (setf (aref threads i)
+              (bt:make-thread (lambda ()
+                                (setf (aref fitnesses i)
+                                      (evaluate gp (aref population i))))))))
+    (dotimes (i len)
+      (bt:join-thread (aref threads i)))))
+
+(defun randomize (gp type expr)
+  ;; This should modify the expression sometimes instead of replacing with new
+  (mgl-gpr:random-gp-expression gp (lambda (level) nil)
+                            :type type))
+
 (defun report-fittest (gp fittest fitness)
   (format t "Best fitness until generation ~S: ~S for~%  ~S~%"
           (mgl-gpr:generation-counter gp) fitness fittest))

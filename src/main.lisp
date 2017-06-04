@@ -45,7 +45,9 @@
                  :population-size 8
                  :copy-chance 0.9
                  :mutation-chance 0.1
-                 :evaluator 'evaluate
+                 :evaluator 'evaluate ;; To avoid an error, mass-evaluate should take precedance
+                 :mass-evaluator 'mass-evaluate
+                 :randomizer 'randomize
                  :selector 'select
                  :fittest-changed-fn 'report-fittest))
 
