@@ -59,37 +59,45 @@
 
 (defvar *sorted-world*)
 
-(defun get-score (expr)
-  (let ((ws (make-client *url*))
-        (lock (bt:make-lock)) ;; Only needed by condition-wait
-        (done (bt:make-condition-variable))
-        (score 0)
-        (responses 0)
-        (life-limit (* 512 (+ 1 (mgl-gpr:generation-counter *gp*)))))
-    (send ws (make-join-message))
-    (on :close ws
-        (lambda (&key code reason)
-          (format t "Sent ~A responses~%" responses)
-          (if code
-            (format t "Closed '~A' (Code=~A) ~%" reason code))
-          (bt:condition-notify done)))
-    (on :error ws
-        (lambda (error)
-          (format t "Error: ~S~%" error)
-          (bt:condition-notify done)))
-    (on :message ws
-        (lambda (message)
-          (let ((l-score (handle-message ws message expr)))
-            (incf responses)
-            (if l-score
-              (setf score l-score))
-            (if (>= responses life-limit)
-              (bt:condition-notify done)))))
-    (start-connection ws)
-    (bt:with-lock-held (lock)
-                       (bt:condition-wait done lock)
-                       (close-connection ws)
-                       score)))
+(let ((out *standard-output*))
+  (defun get-score (expr)
+    (let ((*standard-output* out)
+          (ws (make-client *url*))
+          (lock (bt:make-lock)) ; For done-p
+          (done-p nil)
+          (done-cond (bt:make-condition-variable))
+          (score 0)
+          (responses 0)
+          (life-limit (* 512 (+ 1 (mgl-gpr:generation-counter *gp*)))))
+      (flet ((done ()
+               (bt:with-lock-held (lock)
+                 (setf done-p t))
+               (bt:condition-notify done-cond)))
+        (send ws (make-join-message))
+        (on :close ws
+            (lambda (&key code reason)
+              (format t "Sent ~A responses~%" responses)
+              (when code
+                (format t "Closed '~A' (Code=~A) ~%" reason code))
+              (done)))
+        (on :error ws
+            (lambda (error)
+              (format t "Error: ~S~%" error)
+              (done)))
+        (on :message ws
+            (lambda (message)
+              (let ((l-score (handle-message ws message expr)))
+                (incf responses)
+                (when l-score
+                  (setf score l-score))
+                (when (>= responses life-limit)
+                  (done)))))
+        (start-connection ws)
+        (bt:with-lock-held (lock)
+          (loop while (not done-p)
+             do (bt:condition-wait done-cond lock :timeout 300)))
+        (close-connection ws)
+        score))))
 
 (defun evaluate (gp expr)
   (declare (ignore gp))
