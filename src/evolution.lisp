@@ -50,7 +50,8 @@
         (lock (bt:make-lock)) ;; Only needed by condition-wait
         (done (bt:make-condition-variable))
         (score 0)
-        (responses 0))
+        (responses 0)
+        (life-limit (* 512 (+ 1 (mgl-gpr:generation-counter *gp*)))))
     (send ws (make-join-message))
     (on :close ws
         (lambda (&key code reason)
@@ -68,7 +69,7 @@
             (incf responses)
             (if l-score
               (setf score l-score))
-            (if (>= responses 1024)
+            (if (>= responses life-limit)
               (close-connection ws)))))
     (start-connection ws)
     (bt:with-lock-held (lock)
