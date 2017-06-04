@@ -99,11 +99,9 @@
         (format t "Bot score, size: ~a, ~a~%" score size)
         (cond
           ((> size 64) ;; Penalize big expressions
-           (- score size))
-          ((= size 4) ;; Penalize one-liners
-           (- score 16))
-          (t
-            score))))
+           (- score (/ size 2)))
+          (t ;; Penalize small expressions
+           (- score (- 64 size))))))
 
 (defun mass-evaluate (gp population fitnesses)
   (let* ((len (length population))
