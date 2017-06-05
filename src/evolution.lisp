@@ -82,11 +82,19 @@
     (dotimes (i len)
       (let ((i i))
         (setf (aref threads i)
-              (bt:make-thread (lambda ()
-                                (setf (aref fitnesses i)
-                                      (evaluate gp (aref population i))))))))
+              (bt:make-thread
+               (lambda ()
+                 (setf (aref fitnesses i)
+                       (restart-case
+                           (evaluate gp (aref population i))
+                         (abort () :report "Cancel all evaluation threads"
+                           (loop for thread across threads
+                              when (not (eq thread (bt:current-thread)))
+                              do (bt:destroy-thread thread))
+                           0))))))))
     (dotimes (i len)
-      (bt:join-thread (aref threads i)))))
+      (when (bt:thread-alive-p (aref threads i))
+        (bt:join-thread (aref threads i))))))
 
 (defun randomize (gp type expr)
   ;; This should modify the expression sometimes instead of replacing with new
@@ -103,4 +111,5 @@
 
 (defun advance-gp (gp)
   (format t "Generation ~S~%" (mgl-gpr:generation-counter gp))
-  (mgl-gpr:advance gp))
+  (restart-case (mgl-gpr:advance gp)
+    (abort () :report "Stop advancing gp" nil)))
