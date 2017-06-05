@@ -109,7 +109,7 @@
 (defun valid-p (expr)
   (handler-case
       (let ((*sorted-world* nil))
-        (numberp (funcall (compile-expression expr))))
+        (numberp (eval expr)))
     (error () nil)))
 
 (defun evaluate (gp expr)
@@ -121,10 +121,12 @@
             (size (mgl-gpr:count-nodes expr)))
         (format t "Bot score, size: ~a, ~a~%" score size)
         (cond
-          ((> size 64) ;; Penalize big expressions
-           (- score (/ size 2)))
-          (t ;; Penalize small expressions
-           (- score (- 64 size)))))))
+          ((> size 128) ;; Penalize big expressions
+           (- score (/ (- size 128) 2)))
+          ((< size 64) ;; Penalize small expressions
+           (- score (- 64 size)))
+          (t
+            score)))))
 
 (defun mass-evaluate (gp population fitnesses)
   (let* ((len (length population))
