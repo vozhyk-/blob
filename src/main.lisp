@@ -21,7 +21,7 @@
   (let* ((*sorted-world* (sort-world decoded-message))
          (direction (call-and-validate generated-fun)))
     (alexandria:plist-hash-table
-      (list "direction" direction))))
+     (list "direction" direction))))
 
 (defun make-join-message ()
   "!")
@@ -30,9 +30,9 @@
   (let* ((parsed-msg (yason:parse message))
          (score (decode-score parsed-msg)))
     (if score
-      score
-      (and (send ws (encode-action (reply-gp expr (decode-world parsed-msg))))
-           nil))))
+        score
+        (and (send ws (encode-action (reply-gp expr (decode-world parsed-msg))))
+             nil))))
 
 (defun connect (url)
   (let ((ws (make-client url))
@@ -65,9 +65,11 @@
                        :selector 'select
                        :fittest-changed-fn 'report-fittest))
   (loop repeat (mgl-gpr:population-size *gp*) do
-       (mgl-gpr:add-individual *gp*
-         (mgl-gpr:random-gp-expression *gp*
-           (lambda (level) (declare (ignore level)) nil)))))
+       (mgl-gpr:add-individual
+        *gp*
+        (mgl-gpr:random-gp-expression
+         *gp*
+         (lambda (level) (declare (ignore level)) nil)))))
 
 (reset-gp)
 

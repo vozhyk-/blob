@@ -11,10 +11,10 @@
         (let ((direction (blob-direction closest-blob)))
           (case (blob-type closest-blob)
             ((0 2)
-             ;(format t "Escaping a player or a mine: ~a~%" (- direction))
+             ;;(format t "Escaping a player or a mine: ~a~%" (- direction))
              (- direction))
             (1
-             ;(format t "Chasing food: ~a~%" direction)
+             ;;(format t "Chasing food: ~a~%" direction)
              direction)
             (t 45))))))
 

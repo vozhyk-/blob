@@ -1,46 +1,46 @@
 (defparameter *operators* (list ;; Blob related operators
-                                (mgl-gpr:operator (blob-direction blob) direction)
-                                (mgl-gpr:operator (blob-distance blob) distance)
-                                (mgl-gpr:operator (blob-type blob) type)
-                                (mgl-gpr:operator (blob-size blob) size)
-                                ;; sorted-world related operations
-                                (mgl-gpr:operator (get-blob sorted-world position) blob)
-                                (mgl-gpr:operator (is-nil blob) cond)
-                                ;; Branch
-                                (mgl-gpr:operator (if cond
-                                                    blob
-                                                    blob) blob
-                                                  :weight 0.2)
-                                (mgl-gpr:operator (if cond
-                                                    direction
-                                                    direction) direction
-                                                  :weight 0.2)
-                                (mgl-gpr:operator (and cond cond) cond
-                                                  :weight 0.01)
-                                (mgl-gpr:operator (or cond cond) cond
-                                                  :weight 0.01)
-                                ;; Direction-related condtions
-                                (mgl-gpr:operator (< direction direction) cond
-                                                  :weight 0.1)
-                                ;; Distance-related condtions
-                                (mgl-gpr:operator (< distance distance) cond
-                                                  :weight 0.2)
-                                (mgl-gpr:operator (< const-distance distance) cond
-                                                  :weight 0.1)
-                                (mgl-gpr:operator (< distance const-distance) cond
-                                                  :weight 0.1)
-                                ;; Type-related condtions
-                                (mgl-gpr:operator (= type type) cond
-                                                  :weight 0.1)
-                                (mgl-gpr:operator (= const-type type) cond
-                                                  :weight 0.3)
-                                ;; Size-related condtions
-                                (mgl-gpr:operator (< size size) cond
-                                                  :weight 0.2)
-                                (mgl-gpr:operator (< const-size size) cond
-                                                  :weight 0.1)
-                                (mgl-gpr:operator (< size const-size) cond
-                                                  :weight 0.1)))
+                           (mgl-gpr:operator (blob-direction blob) direction)
+                           (mgl-gpr:operator (blob-distance blob) distance)
+                           (mgl-gpr:operator (blob-type blob) type)
+                           (mgl-gpr:operator (blob-size blob) size)
+                           ;; sorted-world related operations
+                           (mgl-gpr:operator (get-blob sorted-world position) blob)
+                           (mgl-gpr:operator (is-nil blob) cond)
+                           ;; Branch
+                           (mgl-gpr:operator (if cond
+                                                 blob
+                                                 blob) blob
+                                                 :weight 0.2)
+                           (mgl-gpr:operator (if cond
+                                                 direction
+                                                 direction) direction
+                                                 :weight 0.2)
+                           (mgl-gpr:operator (and cond cond) cond
+                                             :weight 0.01)
+                           (mgl-gpr:operator (or cond cond) cond
+                                             :weight 0.01)
+                           ;; Direction-related condtions
+                           (mgl-gpr:operator (< direction direction) cond
+                                             :weight 0.1)
+                           ;; Distance-related condtions
+                           (mgl-gpr:operator (< distance distance) cond
+                                             :weight 0.2)
+                           (mgl-gpr:operator (< const-distance distance) cond
+                                             :weight 0.1)
+                           (mgl-gpr:operator (< distance const-distance) cond
+                                             :weight 0.1)
+                           ;; Type-related condtions
+                           (mgl-gpr:operator (= type type) cond
+                                             :weight 0.1)
+                           (mgl-gpr:operator (= const-type type) cond
+                                             :weight 0.3)
+                           ;; Size-related condtions
+                           (mgl-gpr:operator (< size size) cond
+                                             :weight 0.2)
+                           (mgl-gpr:operator (< const-size size) cond
+                                             :weight 0.1)
+                           (mgl-gpr:operator (< size const-size) cond
+                                             :weight 0.1)))
 (defparameter *literals* (list (mgl-gpr:literal (sorted-world)
                                  '*sorted-world*)
                                (mgl-gpr:literal (position)
@@ -93,13 +93,13 @@
                 (when (>= responses life-limit)
                   (done)))))
         (start-connection ws)
-          (let ((i 0))
-            (loop while (and (> 16 i) (not done-p)) do
-                  (incf i)
-        (bt:with-lock-held (lock)
-                  (bt:condition-wait done-cond lock :timeout 20))))
-          (unless done-p
-            (format t "~&Spurious wakeup!~%"))
+        (let ((i 0))
+          (loop while (and (> 16 i) (not done-p)) do
+               (incf i)
+               (bt:with-lock-held (lock)
+                 (bt:condition-wait done-cond lock :timeout 20))))
+        (unless done-p
+          (format t "~&Spurious wakeup!~%"))
         (close-connection ws)
         score))))
 
@@ -126,11 +126,11 @@
           ((< size 64) ;; Penalize small expressions
            (- score (- 64 size)))
           (t
-            score)))))
+           score)))))
 
 (defun mass-evaluate (gp population fitnesses)
   (let* ((len (length population))
-        (threads (make-array len)))
+         (threads (make-array len)))
     (format t "Mass-evaluate ~S expressions~%" len)
     (dotimes (i len)
       (let ((i i))
@@ -144,7 +144,7 @@
 (defun randomize (gp type expr)
   ;; This should modify the expression sometimes instead of replacing with new
   (mgl-gpr:random-gp-expression gp (lambda (level) nil)
-                            :type type))
+                                :type type))
 
 (defun report-fittest (gp fittest fitness)
   (format t "Best fitness until generation ~S: ~S for~%  ~S~%"

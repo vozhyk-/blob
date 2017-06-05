@@ -8,8 +8,8 @@
 
 (defun decode-score (message)
   (if (hash-table-p message)
-    (gethash "score" message)
-    nil))
+      (gethash "score" message)
+      nil))
 
 (defclass blob ()
   ((position :initarg :position :accessor blob-position)
@@ -61,5 +61,5 @@
 
 (defun get-blob (sorted-world position)
   (if (< position (length sorted-world))
-    (nth position sorted-world)
-    +nil-blob+))
+      (nth position sorted-world)
+      +nil-blob+))
