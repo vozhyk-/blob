@@ -52,7 +52,7 @@
                        :toplevel-type 'direction
                        :operators *operators*
                        :literals *literals*
-                       :population-size 16
+                       :population-size 32
                        :copy-chance 0.3
                        ;; It means that there is 1 - 0.3 - 0.5 = 0.2
                        ;; chance that it will crossover

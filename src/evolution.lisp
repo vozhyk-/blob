@@ -156,7 +156,7 @@
 (defun select (gp fitnesses)
   (declare (ignore gp))
   (mgl-gpr:hold-tournament fitnesses
-                           :n-contestants 4))
+                           :n-contestants 16))
 
 (defun advance-gp (gp)
   (format t "Generation ~S~%" (mgl-gpr:generation-counter gp))
