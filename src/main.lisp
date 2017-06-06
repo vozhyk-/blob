@@ -9,17 +9,9 @@
 (defun reply (decoded-message)
   (encode-action (bot-action decoded-message)))
 
-(defun call-and-validate (fun)
-  (handler-case
-      (let ((result (funcall fun)))
-        (assert (numberp result)))
-    (error (error)
-      (format t "~&Generated expression has an error: ~a~%" error)
-      0)))
-
 (defun reply-gp (generated-fun decoded-message)
   (let* ((*sorted-world* (sort-world decoded-message))
-         (direction (call-and-validate generated-fun)))
+         (direction (funcall generated-fun)))
     (alexandria:plist-hash-table
      (list "direction" direction))))
 
