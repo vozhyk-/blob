@@ -102,18 +102,26 @@
 (defun compile-expression (expr)
   (compile nil `(lambda () ,expr)))
 
-(defun valid-p (expr)
+(defun valid-p (fun)
+  (let ((ret t))
   (handler-case
-      (let ((*sorted-world* nil))
-        (numberp (eval expr)))
-    (error () nil)))
+      (let* ((*sorted-world* nil)
+             (result (funcall fun)))
+        (assert (numberp result)))
+    (error (error)
+      (format t "~&Generated expression has an error: ~a~%" error)
+      (setf ret nil)))
+  ret))
 
 (defun evaluate (gp expr)
   (declare (ignore gp))
   (format t "Expr: ~a~%" expr)
-  (if (not (valid-p expr))
-      -400
-      (let ((score (get-score (compile-expression expr)))
+  (let ((fun (compile-expression expr)))
+  (if (not (valid-p fun))
+      (progn
+        (format t "Expression did not pass the check~%")
+        -400)
+      (let ((score (get-score fun))
             (size (mgl-gpr:count-nodes expr)))
         (format t "Bot score, size: ~a, ~a~%" score size)
         (cond
@@ -122,7 +130,7 @@
           ((< size 64) ;; Penalize small expressions
            (- score (- 64 size)))
           (t
-           score)))))
+           score))))))
 
 (defun mass-evaluate (gp population fitnesses)
   (let* ((len (length population))
@@ -135,10 +143,12 @@
                                 (setf (aref fitnesses i)
                                       (handler-case
                                           (evaluate gp (aref population i))
-                                          ;; Errors at this level are probably not expressions fault
-                                        (error () 0))))))))
+                                        (error (error)
+                                          (format t "~&Error occurred in the evaluate thread: ~a~%" error)
+                                          -400))))))))
     (dotimes (i len)
-      (bt:join-thread (aref threads i)))))
+      (bt:join-thread (aref threads i))
+      (format t "Adjusted-score: ~a~%" (aref fitnesses i)))))
 
 (defun randomize (gp type expr)
   ;; This should modify the expression sometimes instead of replacing with new
