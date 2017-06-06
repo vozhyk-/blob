@@ -53,10 +53,10 @@
                        :operators *operators*
                        :literals *literals*
                        :population-size 16
-                       :copy-chance 0.2
-                       ;; It means that there is 1 - 0.2 - 0.4 = 0.4
+                       :copy-chance 0.3
+                       ;; It means that there is 1 - 0.3 - 0.5 = 0.2
                        ;; chance that it will crossover
-                       :mutation-chance 0.4
+                       :mutation-chance 0.5
                        ;; To avoid an error, mass-evaluate
                        ;; should take precedance
                        :evaluator 'evaluate
