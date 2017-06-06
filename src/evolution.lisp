@@ -19,14 +19,14 @@
                                              :weight 0.01)
                            (mgl-gpr:operator (or cond cond) cond
                                              :weight 0.01)
+                           (mgl-gpr:operator (not cond) cond
+                                             :weight 0.1)
                            ;; Direction-related condtions
                            (mgl-gpr:operator (< direction direction) cond
                                              :weight 0.1)
                            ;; Distance-related condtions
                            (mgl-gpr:operator (< distance distance) cond
                                              :weight 0.2)
-                           (mgl-gpr:operator (< const-distance distance) cond
-                                             :weight 0.1)
                            (mgl-gpr:operator (< distance const-distance) cond
                                              :weight 0.1)
                            ;; Type-related condtions
@@ -36,8 +36,6 @@
                                              :weight 0.3)
                            ;; Size-related condtions
                            (mgl-gpr:operator (< size size) cond
-                                             :weight 0.2)
-                           (mgl-gpr:operator (< const-size size) cond
                                              :weight 0.1)
                            (mgl-gpr:operator (< size const-size) cond
                                              :weight 0.1)))
