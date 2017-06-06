@@ -137,7 +137,10 @@
         (setf (aref threads i)
               (bt:make-thread (lambda ()
                                 (setf (aref fitnesses i)
-                                      (evaluate gp (aref population i))))))))
+                                      (handler-case
+                                          (evaluate gp (aref population i))
+                                          ;; Errors at this level are probably not expressions fault
+                                        (error () 0))))))))
     (dotimes (i len)
       (bt:join-thread (aref threads i)))))
 
