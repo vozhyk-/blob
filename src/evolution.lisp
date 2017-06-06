@@ -3,6 +3,9 @@
                            (mgl-gpr:operator (blob-distance blob) distance)
                            (mgl-gpr:operator (blob-type blob) type)
                            (mgl-gpr:operator (blob-size blob) size)
+                           ;; Direction related operators
+                           (mgl-gpr:operator (- direction) direction
+                                             :weight 0.1)
                            ;; sorted-world related operations
                            (mgl-gpr:operator (get-blob sorted-world position) blob)
                            (mgl-gpr:operator (is-nil blob) cond)
