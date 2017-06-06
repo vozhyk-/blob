@@ -23,7 +23,7 @@
          (score (decode-score parsed-msg)))
     (if score
         score
-        (and (send ws (encode-action (reply-gp expr (decode-world parsed-msg))))
+        (and (send ws (encode-action (reply-gp expr (parse-world parsed-msg))))
              nil))))
 
 (defun connect (url)

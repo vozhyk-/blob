@@ -1,6 +1,3 @@
-(defun decode-world (message)
-  (mapcar #'parse-blob message))
-
 (defun encode-action (action)
   (with-output-to-string (stream)
     (format stream ";")
@@ -53,13 +50,29 @@
                             '("x" 0 "y" 0)
                             :test #'equal)))
 
+(defconstant +empty-world+
+  (make-instance 'world :others nil :own-size 30))
+
 (defun is-nil (blob)
   (eq +nil-blob+ blob))
 
+(defclass world ()
+  ((others :initarg :others :accessor others)
+   (own-size :initarg :own-size :accessor own-size)))
+
+(defun parse-world (message)
+  (make-instance 'world
+                 :others (mapcar #'parse-blob
+                                 (gethash "others" message))
+                 :own-size (gethash "ownSize" message)))
+
 (defun sort-world (world)
-  (sort world #'< :key #'blob-distance))
+  (make-instance 'world
+                 :others (sort (others world) #'< :key #'blob-distance)
+                 :own-size (own-size world)))
 
 (defun get-blob (sorted-world position)
-  (if (< position (length sorted-world))
-      (nth position sorted-world)
-      +nil-blob+))
+  (with-accessors ((others others)) sorted-world
+    (if (< position (length others))
+        (nth position others)
+        +nil-blob+)))

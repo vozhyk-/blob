@@ -5,6 +5,7 @@
                            (mgl-gpr:operator (blob-size blob) size)
                            ;; sorted-world related operations
                            (mgl-gpr:operator (get-blob sorted-world position) blob)
+                           (mgl-gpr:operator (own-size sorted-world) size)
                            (mgl-gpr:operator (is-nil blob) cond)
                            ;; Branch
                            (mgl-gpr:operator (if cond
@@ -104,14 +105,14 @@
 
 (defun valid-p (fun)
   (let ((ret t))
-  (handler-case
-      (let* ((*sorted-world* nil)
-             (result (funcall fun)))
-        (assert (numberp result)))
-    (error (error)
-      (format t "~&Generated expression has an error: ~a~%" error)
-      (setf ret nil)))
-  ret))
+    (handler-case
+        (let* ((*sorted-world* +empty-world+)
+               (result (funcall fun)))
+          (assert (numberp result)))
+      (error (error)
+        (format t "~&Generated expression has an error: ~a~%" error)
+        (setf ret nil)))
+    ret))
 
 (defun evaluate (gp expr)
   (declare (ignore gp))
