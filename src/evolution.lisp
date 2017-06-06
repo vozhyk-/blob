@@ -47,8 +47,6 @@
                                  (random 8))
                                (mgl-gpr:literal (const-direction)
                                  (random 360.0))
-                               (mgl-gpr:literal (const-direction)
-                                 (random 360.0))
                                (mgl-gpr:literal (const-distance)
                                  (random 100))
                                (mgl-gpr:literal (const-type) 0)
